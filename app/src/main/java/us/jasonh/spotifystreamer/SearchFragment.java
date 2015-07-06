@@ -1,14 +1,16 @@
 package us.jasonh.spotifystreamer;
 
+import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,21 +26,30 @@ import kaaes.spotify.webapi.android.models.ArtistsPager;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class SearchActivityFragment extends Fragment {
+public class SearchFragment extends Fragment {
 
-    private View mRootView;
     private ListView mListView;
 
-    public SearchActivityFragment() {
+    public SearchFragment() {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mRootView = inflater.inflate(R.layout.fragment_search, container, false);
-        mListView = (ListView) mRootView.findViewById(R.id.listview_artists);
+        View rootView = inflater.inflate(R.layout.fragment_search, container, false);
+        mListView = (ListView) rootView.findViewById(R.id.listview_artists);
 
-        final EditText editText = (EditText) mRootView.findViewById(R.id.edit_text);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                Intent intent = new Intent(getActivity(), TopTracksActivity.class);
+                String artistId = ((ArtistItem) mListView.getAdapter().getItem(position)).getId();
+                intent.putExtra(SearchActivity.EXTRA_MESSAGE, artistId);
+                startActivity(intent);
+            }
+        });
+
+        final EditText editText = (EditText) rootView.findViewById(R.id.edit_text);
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -56,7 +67,7 @@ public class SearchActivityFragment extends Fragment {
             }
         });
 
-        return mRootView;
+        return rootView;
     }
 
     public class SearchSpotifyTask extends AsyncTask<Void, String, Void> {
@@ -77,13 +88,14 @@ public class SearchActivityFragment extends Fragment {
             mArtists = new ArrayList<>();
             ArtistsPager results = service.searchArtists(mSearchTerm);
             List<Artist> artists = results.artists.items;
-            for (int i = 0; i < artists.size(); i++) {
+            for (int i = 0; i < artists.size() && i < 10; i++) {
                 Artist artist = artists.get(i);
-                String imageUrl = "https://placeholdit.imgix.net/~text?txtsize=6&txt=50%C3%9750&w=50&h=50";
+                //artist
+                String imageUrl = "";
                 if (artist.images.size() > 0) {
                     imageUrl = artist.images.get(0).url;
                 }
-                ArtistItem artistItem = new ArtistItem(imageUrl, artist.name);
+                ArtistItem artistItem = new ArtistItem(artist.id, imageUrl, artist.name);
                 mArtists.add(artistItem);
             }
             mArtistAdapter = new ArtistAdapter(getActivity(), mArtists);

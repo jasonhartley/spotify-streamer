@@ -16,7 +16,6 @@
     <TextView
         android:id="@+id/list_item_artist_name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Feel The Light" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

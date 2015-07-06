@@ -1,16 +1,26 @@
 package us.jasonh.spotifystreamer;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class ResultsActivity extends ActionBarActivity {
+public class TopTracksActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_results);
+        //setContentView(R.layout.activity_top_tracks);
+
+        if (savedInstanceState == null) {
+            TopTracksFragment fragment = new TopTracksFragment();
+            fragment.setArguments(getIntent().getExtras());
+            getSupportFragmentManager().beginTransaction().add(
+                    android.R.id.content, fragment).commit();
+        }
     }
 
 

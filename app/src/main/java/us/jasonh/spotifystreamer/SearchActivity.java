@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class SearchActivity extends AppCompatActivity {
+    public final static String EXTRA_MESSAGE = "us.jasonh.spotifystreamer.MESSAGE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ResultsActivity"
+            android:name=".TopTracksActivity"
             android:label="@string/title_activity_results"
             android:parentActivityName=".SearchActivity" >
             <meta-data
