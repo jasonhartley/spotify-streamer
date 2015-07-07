@@ -1,10 +1,9 @@
 package us.jasonh.spotifystreamer;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,7 +52,6 @@ public class SearchFragment extends Fragment {
                 if (event == null || event.getAction() != KeyEvent.ACTION_DOWN) {
                     return false;
                 }
-                Log.d("jch", "v: " + v + ", actionId: " + actionId + ", event: " + event.getAction());
                 if (actionId != EditorInfo.IME_ACTION_NEXT && actionId != EditorInfo.IME_NULL) {
                     return false;
                 }
@@ -92,6 +90,9 @@ public class SearchFragment extends Fragment {
                 }
                 ArtistItem artistItem = new ArtistItem(artist.id, imageUrl, artist.name);
                 artistItems.add(artistItem);
+            }
+            if (artists.size() == 0) {
+                Util.showToast(getActivity(), "No results for \"" + mSearchTerm + "\"");
             }
             mArtistAdapter = new ArtistAdapter(getActivity(), artistItems);
 

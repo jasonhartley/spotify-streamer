@@ -1,9 +1,8 @@
 package us.jasonh.spotifystreamer;
 
+import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +33,6 @@ public class TopTracksFragment extends Fragment {
         mListView = (ListView) rootView.findViewById(R.id.listview_tracks);
 
         String artistId = getArguments().getString(SearchActivity.EXTRA_MESSAGE, "default");
-        Log.d("jch", "artistId: " + artistId);
 
         SearchSpotifyTask task = new SearchSpotifyTask(artistId);
         task.execute();
@@ -44,7 +42,6 @@ public class TopTracksFragment extends Fragment {
 
     public class SearchSpotifyTask extends AsyncTask<Void, String, Void> {
         private String mArtistId;
-        private List<TrackItem> mTracks;
         private TrackAdapter mTrackAdapter;
 
         public SearchSpotifyTask(String artistId) {
@@ -57,7 +54,7 @@ public class TopTracksFragment extends Fragment {
             SpotifyApi api = new SpotifyApi();
             SpotifyService service = api.getService();
 
-            mTracks = new ArrayList<>();
+            List<TrackItem> trackItems = new ArrayList<>();
             Map<String, Object> map = new HashMap<>();
             map.put("country", Locale.getDefault().getCountry());
             Tracks results = service.getArtistTopTrack(mArtistId, map);
@@ -69,9 +66,13 @@ public class TopTracksFragment extends Fragment {
                     imageUrl = track.album.images.get(0).url;
                 }
                 TrackItem trackItem = new TrackItem(track.name, track.album.name, imageUrl);
-                mTracks.add(trackItem);
+                trackItems.add(trackItem);
             }
-            mTrackAdapter = new TrackAdapter(getActivity(), mTracks);
+            if (tracks.size() == 0) {
+                Util.showToast(getActivity(), "No results for that artist");
+            }
+
+            mTrackAdapter = new TrackAdapter(getActivity(), trackItems);
 
             publishProgress();
 
