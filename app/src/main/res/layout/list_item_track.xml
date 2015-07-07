@@ -23,13 +23,14 @@
         <TextView
             android:id="@+id/list_item_track_name"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp" />
 
         <TextView
             android:id="@+id/list_item_album"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp" />
 
     </LinearLayout>
 

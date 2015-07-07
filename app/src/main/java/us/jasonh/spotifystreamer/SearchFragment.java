@@ -3,7 +3,7 @@ package us.jasonh.spotifystreamer;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -23,9 +23,6 @@ import kaaes.spotify.webapi.android.SpotifyService;
 import kaaes.spotify.webapi.android.models.Artist;
 import kaaes.spotify.webapi.android.models.ArtistsPager;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class SearchFragment extends Fragment {
 
     private ListView mListView;
@@ -72,7 +69,6 @@ public class SearchFragment extends Fragment {
 
     public class SearchSpotifyTask extends AsyncTask<Void, String, Void> {
         private String mSearchTerm;
-        private List<ArtistItem> mArtists;
         private ArtistAdapter mArtistAdapter;
 
         public SearchSpotifyTask(String searchTerm) {
@@ -85,20 +81,19 @@ public class SearchFragment extends Fragment {
             SpotifyApi api = new SpotifyApi();
             SpotifyService service = api.getService();
 
-            mArtists = new ArrayList<>();
             ArtistsPager results = service.searchArtists(mSearchTerm);
             List<Artist> artists = results.artists.items;
+            List<ArtistItem> artistItems = new ArrayList<>();
             for (int i = 0; i < artists.size() && i < 10; i++) {
                 Artist artist = artists.get(i);
-                //artist
                 String imageUrl = "";
                 if (artist.images.size() > 0) {
                     imageUrl = artist.images.get(0).url;
                 }
                 ArtistItem artistItem = new ArtistItem(artist.id, imageUrl, artist.name);
-                mArtists.add(artistItem);
+                artistItems.add(artistItem);
             }
-            mArtistAdapter = new ArtistAdapter(getActivity(), mArtists);
+            mArtistAdapter = new ArtistAdapter(getActivity(), artistItems);
 
             publishProgress();
 
@@ -110,6 +105,4 @@ public class SearchFragment extends Fragment {
             mListView.setAdapter(mArtistAdapter);
         }
     }
-
-
 }

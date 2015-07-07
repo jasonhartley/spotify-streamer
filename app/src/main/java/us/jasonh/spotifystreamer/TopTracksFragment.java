@@ -2,7 +2,7 @@ package us.jasonh.spotifystreamer;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,9 +61,7 @@ public class TopTracksFragment extends Fragment {
             Map<String, Object> map = new HashMap<>();
             map.put("country", Locale.getDefault().getCountry());
             Tracks results = service.getArtistTopTrack(mArtistId, map);
-            //ArtistsPager results = service.searchArtists(mArtistId);
             List<Track> tracks = results.tracks;
-            //List<Artist> artists = results.artists.items;
             for (int i = 0; i < tracks.size() && i < 10; i++) {
                 Track track = tracks.get(i);
                 String imageUrl = "";
